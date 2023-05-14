@@ -12,7 +12,8 @@ def buttonQuery(buttonState, list, listname, listdesc):
         buttonState = None
         pass
 
-def spider.self
+def spider.self()
+
 class Game:
     print("You find a weapon!")
 
