@@ -7,6 +7,8 @@ weapons = {}
 equipedWeapon = weapons
 defenseFlag = False
 turn = 0
+enemies = []
+counter = 0
 
 
 #check death status for player
@@ -44,7 +46,48 @@ class Enemy:
         attack_and_calculate_remaining_health_player(self.damage, pHealth)
         #deathCheck(pHealth)
 
-#
+
+spider = Enemy("Spider", 5, 19)
+smallSnake = Enemy("Small Snake", 3,6)
+true_enemies = [spider, smallSnake]
+
+for x in true_enemies:
+    enemies.append(true_enemies[counter].entity)
+    counter += 1
+
+print(enemies)
+
+
+class Player:
+    def __init__(self, name) -> None:
+        self.name = name
+
+    def choose_enemy(self):
+        global chosen_enemy
+        print(enemies)
+        chosen_target = int(input("Which enemy do you target?")) - 1
+        chosen_enemy = true_enemies[chosen_target]
+        print("Name: " + str(chosen_enemy.entity) + " Damage: " + str(chosen_enemy.damage) + "Damage: " + str(chosen_enemy.health))
+        
+
+
+    def take_turn(self):
+        Menu1 = Menu(equipedWeapon,items,pHealth)
+        selection = input("1.Attack\n2.Defend\n3.Item\n4.Escape")
+        match selection:
+            case "Attack":
+                Player.choose_enemy()
+                Menu1.attack_to_enemy()
+            case "Defend":
+                Menu1.defend()
+            case "Item":
+                Menu1.item()
+            case "Escape":
+                Menu1.escape()
+            case _:
+                pass
+            # TODO workfor a loop or somthing
+
 class Menu:
     def __init__(self, equipedWeapon, items, health, enemyHealth=5):
         self.equippedWeapon = equipedWeapon
@@ -56,7 +99,7 @@ class Menu:
 
         if self.equippedWeapon:
             attackDamage = int(list(equipedWeapon.values())[0])
-            inflictedDamage = self.enemyHealth - attackDamage
+            inflictedDamage = chosen_enemy.health - attackDamage
             print(inflictedDamage)
         else:
             print("You have no weapons!")
@@ -84,32 +127,6 @@ class Menu:
 
         print(escapeOption)
 
-class Player:
-    def __init__(self, name) -> None:
-        self.name = name
-
-
-    def take_turn(self):
-        Menu1 = Menu(equipedWeapon,items,pHealth)
-        selection = input("1.Attack\n2.Defend\n3.Item\n4.Escape")
-        match selection:
-            case "Attack":
-                Menu1.attack_to_enemy()
-                print(equipedWeapon)
-            case "Defend":
-                Menu1.defend()
-            case "Item":
-                Menu1.item()
-            case "Escape":
-                Menu1.escape()
-            case _:
-                pass
-
-
-
-spider = Enemy("Spider", 5, 19)
-smallSnake = Enemy("Small Snake", 3,6)
-
 
 def prematch():
     print("You find a weapon!")
@@ -131,6 +148,7 @@ def prematch():
 class Game:
     game_over = False
     enemyParty = {spider, smallSnake}
+    Player = Player("Jess")
     
     def __init__(self):
         self.game_over = False
@@ -142,8 +160,4 @@ class Game:
 
     prematch()
     while game_over == False:
-        jess = Player("Jess")
-        jess.take_turn()
-        
-
-
+        Player.take_turn()
